@@ -193,3 +193,65 @@ Automated systems ensure quality of campaigns:
 ---
 
 ✅ **Next:** Section 2 – System Optimization Data Products (RSA Optimization, Bid Elasticity, CIT Mining)
+
+
+
+
+////////
+
+### 3. Markov Chains Attribution Model
+
+
+/////////
+
+### 🎯 How Markov Attribution Feeds Into Bidding Strategy at GYG
+
+Markov attribution is not used directly in real-time bidding algorithms but plays a critical role in **steering, tROAS setting, and campaign strategy** by improving the quality of input signals.
+
+---
+
+#### ✅ 1. Better Performance Signals → Steering + Budget Allocation
+- Replaces last-click conversions with **Markov-attributed conversions** to reflect true channel contribution.
+- Guides **budget reallocation**:
+  - Campaigns undervalued by last-click but strong in Markov → allocate more.
+  - Campaigns overvalued by last-click but weak in Markov → scale back.
+
+---
+
+#### ✅ 2. Improved tROAS Targets
+- Markov-attributed revenue provides more accurate **Return on Ad Spend (ROAS)** and informs **Target ROAS (tROAS)** settings.
+- Prevents bias toward low-funnel channels (e.g., branded search) by recognizing upper-funnel impact (e.g., generic paid search).
+
+---
+
+#### ✅ 3. Input for SEM Bidding Center / Strategy Rules
+- Feeds into dashboards and decision layers that define:
+  - Campaign-level **ROAS thresholds**
+  - **Spend tiers**
+  - **Channel or funnel prioritization**
+- These inputs guide how strategies are selected and configured in the **SEM Bidding Center**.
+
+---
+
+#### ✅ 4. Testing & Strategy Evaluation
+- Used to evaluate bidding strategies (e.g., manual vs. tROAS) based on **true contribution**, not just last-click performance.
+- Enhances fairness and accuracy in performance reviews and A/B tests.
+
+---
+
+### 🔁 Attribution Feedback Loop (Simplified)
+
+```text
+1. User Paths → Tracked & Modeled via Markov Chains
+2. → Attributed Conversions (per path, per channel)
+3. → Aggregated in dashboards (Looker)
+4. → Used to steer budget/tROAS inputs into Bidding Center
+5. → Strategy results evaluated again via Markov KPIs
+
+⚠️ Clarification
+Markov attribution is:
+
+❌ Not sent to Google Ads as real-time conversion actions.
+
+✅ Used outside Google to inform bidding strategies, targets, and budget allocation.
+
