@@ -33,7 +33,7 @@ DATA:
 
 1. sem-reports-etl-google-ads in Databricks
 2. Marketing Attribution Explore plus whatever Paul used for main performance dashboard
-
+Both based on Markov Attribution Numbers
 https://getyourguide.looker.com/dashboards/10618?Super+Account=&Account=&Campaign+ID=&Ca[…]ame=&Location+ID=&Report+Week+of+Year=&Report+Date=30+day
 
 
