@@ -29,6 +29,18 @@ This document provides succinct coverage of key topics that need to be mastered 
 ### 7. Chiara's Workflow and Steering
 
 ---
+DATA:
+
+1. sem-reports-etl-google-ads in Databricks
+2. Marketing Attribution Explore plus whatever Paul used for main performance dashboard
+
+https://getyourguide.looker.com/dashboards/10618?Super+Account=&Account=&Campaign+ID=&Ca[…]ame=&Location+ID=&Report+Week+of+Year=&Report+Date=30+day
+
+
+
+
+
+
 
 
 ---
@@ -53,6 +65,8 @@ At GYG, the Paid Search structure follows a strict hierarchy:
   - **LOC Account**: Location-only keywords (e.g., "berlin")
   - **SEED Account (Near Me)**: "Things to do near me" type queries
   - **Brand Account**: Keywords that include "GetYourGuide" or variants
+  - **Test**
+  - SEED Contains CIT and CIT + near me keywords only & is controlled by location targeting
 
 ---
 
