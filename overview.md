@@ -4,9 +4,9 @@ This document provides succinct coverage of key topics that need to be mastered 
 
 ## Topics to Master
 
-### 1. Google Ads Account Structure
-- **a.** Account Architecture
-- **b.** Setup Process (CMS, Structure, Keywords, Customer Interest Translations and Aliases)
+### [1. Google Ads Account Structure](#section-1-google-ads-structure--architecture)
+- **a.** Account Architecture  
+- **b.** Setup Process (CMS, Structure, Keywords, Customer Interest Translations and Aliases)  
 - **c.** System Management (Operations, Changes, Shutdowns of Keywords and Other Components)
 
 ### 2. System Optimization Data Products
@@ -54,8 +54,6 @@ At GYG, the Paid Search structure follows a strict hierarchy:
   - **SEED Account (Near Me)**: "Things to do near me" type queries
   - **Brand Account**: Keywords that include "GetYourGuide" or variants
 
-> 📌 **Visual Placeholder 1:** Diagram of hierarchy: `MCC → Accounts → Campaigns → Ad Groups`
-
 ---
 
 ## 1.2 Campaign Level
@@ -67,8 +65,6 @@ At GYG, the Paid Search structure follows a strict hierarchy:
 Examples:
 - `Las Vegas` → Campaign with multiple ad groups for helicopter tours, museums, etc.
 - `Eiffel Tower` → POI campaign with ad groups for tickets, guided tours, etc.
-
-> 📌 **Visual Placeholder 2:** Screenshot of campaign-level structure with naming format from Google Ads UI or internal doc
 
 ---
 
@@ -91,8 +87,6 @@ Examples:
     - CI/CIT-specific (f5) ad group
     - DSA ad group
 
-> 📌 **Visual Placeholder 3:** Flowchart of CI → CIT Translation → Keyword Generation → Ad Group Assignment
-
 ---
 
 ## 1.4 Keyword Generation Logic
@@ -106,8 +100,6 @@ Examples:
   - `{{ci_translation}} {{location_alias}}`
   - `{{location_alias}} {{ci_translation}}`
   - Some are prefixed/suffixed depending on rules
-
-> 📌 **Visual Placeholder 4:** Screenshot or schematic of keyword generation examples
 
 ---
 
@@ -126,8 +118,6 @@ Examples:
   - Assign ROAS targets
   - Campaign-level bidding strategies
 
-> 📌 **Visual Placeholder 5:** Screenshot of the SEM Operations Portal or Bidding Center interface
-
 ---
 
 ## 1.6 Inventory & Performance Filters
@@ -143,8 +133,6 @@ Automated systems ensure quality of campaigns:
   - Attaches volume or filters keywords pre-activation? (To be confirmed)
 - **Audience, Targeting, Budget Services**:
   - Still under clarification – may dynamically adjust campaign inputs
-
-> 📌 **Visual Placeholder 6:** Visual of Inventory thresholds table or pause logic explanation
 
 ---
 
