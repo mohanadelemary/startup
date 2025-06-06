@@ -166,7 +166,7 @@ Automated systems ensure quality of campaigns:
 ---
 
 ## 1.9 Reference Links
-
+- [Current Paid search account structure](https://docs.google.com/document/d/10nW54FJwjJne3-n_2afz3mp-ftzpk5sNq2FmTBTI3rM/edit?tab=t.0)
 - [Paid Search DQ&A](https://docs.google.com/presentation/d/1SyPOPFvrvUw4so9gchpnQXx2nnkUerz88RUNMYJFFLA/edit#slide=id.gcefe29681b_0_1054)
 - [Account Naming Convention Doc](https://docs.google.com/document/d/1YkA0sHTlBDBzGBLcydiAiNL0QzfFAfs-4EU6LlEwXWw/edit?tab=t.0#heading=h.rg1a4nx68vwx)
 - [Paid Search Structure - Explanation & Templates](https://docs.google.com/document/d/10nW54FJwjJne3-n_2afz3mp-ftzpk5sNq2FmTBTI3rM/edit?tab=t.0#heading=h.3kv3bcy9mkz)
@@ -176,7 +176,6 @@ Automated systems ensure quality of campaigns:
 - [Mutation Notebook](https://dbc-d10db17d-b6c4.cloud.databricks.com/editor/notebooks/3194791989752051?o=4592942032988138#command/7347089574575382)
 - [SEM Operations Portal](https://sem-admin.gygadmin.com/rsa-assets?page=1&limit=10&filters=%7B%22isSource%22%3A3%7D)
 - [SEM Bidding Center](https://sem-bidding-center.gygservice.com/google/steering/all/)
-
 ---
 
 ✅ **Next:** Section 2 – System Optimization Data Products (RSA Optimization, Bid Elasticity, CIT Mining)
