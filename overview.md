@@ -24,6 +24,9 @@ This document provides succinct coverage of key topics that need to be mastered 
 - **b.** D&E (Design & Experimentation)
 - **c.** Issues with Geo Studies vs. A/B Testing (Power, MDE)
 - **d.** Tools, Apps, Notebooks, Databases
+- Stefano sheet with log and different types of signals
+- MRX insights presentations
+- types of signals
 
 ### 6. DataBricks & Learning Our Data
 
@@ -115,6 +118,7 @@ Examples:
   - `{{ci_translation}} {{location_alias}}`
   - `{{location_alias}} {{ci_translation}}`
   - Some are prefixed/suffixed depending on rules
+  - All KW's are setup per AG in both Exact and Broad Match
 
 ---
 
@@ -145,24 +149,11 @@ Automated systems ensure quality of campaigns:
 - **Autopause**:
   - Stops low-performing keywords
 - **Demand Service**:
-  - Attaches volume or filters keywords pre-activation? (To be confirmed)
-- **Audience, Targeting, Budget Services**:
-  - Still under clarification – may dynamically adjust campaign inputs
-
----
-
-## 1.7 Open Questions to Clarify
-
-- What defines TTD vs non-TTD internally in GYG? answered
-- what about seed, near me and other
-- what about pmax and stuff
-- what about actual super account structure now
-- 
-- Are generic ad groups always tagged as TTD?
-- How are keywords moderated from SQR?
-  - Manual only or performance-based inclusion?
-- Are new LPs auto-generated when new CIs/locations emerge?
-- Keyword match type setup: are both exact & broad always included?
+  - Checks search volumes for for the keywords list before they are created in the structure.
+- **Budget Watcher**:
+  - Watches budgets and provides alerts when limits are near.
+- **Audience and Targeting Service**:
+  - Defines language and location targeting setup.
 
 ---
 
@@ -310,6 +301,7 @@ Markov attribution is:
 6. **Codebase**: Where is the Markov pipeline implemented and maintained internally? Is it reproducible in Looker or Databricks?
 7. **Usage**: Who currently uses the *path-level attribution* outputs? Is it feeding back into Google Ads bidding, portfolio steering, CRM planning, or budgeting?
 8. **Data**: Best sources to use for everything.
+9. Where can see overview of the MC model weights and values per different LOD's
 
 ---
 
