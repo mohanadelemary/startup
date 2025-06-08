@@ -14,7 +14,8 @@ This document provides succinct coverage of key topics that need to be mastered 
 - **b.** Bid Elasticity Mapping
 - **c.** CIT Mining
 
-### 3. Markov Chains Attribution Model
+### [3. Markov Chains Attribution Model](#section-3-markov-chains-attribution-model)
+
 
 ### 4. ROAS Goals and Tactics
 
@@ -197,61 +198,129 @@ Automated systems ensure quality of campaigns:
 
 
 
-////////
+---
 
-### 3. Markov Chains Attribution Model
+# Section 3: Markov Chains Attribution Model
 
 
-/////////
+Rather than assigning global average weights to each channel, GYG's implementation assigns **credit to each channel within a user journey**, based on **how critical its presence is in the probability of conversion**.
 
-### 🎯 How Markov Attribution Feeds Into Bidding Strategy at GYG
-
-Markov attribution is not used directly in real-time bidding algorithms but plays a critical role in **steering, tROAS setting, and campaign strategy** by improving the quality of input signals.
+> The ethos: **Move from fixed heuristics to learned, probabilistic, path-aware attribution that reflects real user behavior.**
 
 ---
 
-#### ✅ 1. Better Performance Signals → Steering + Budget Allocation
-- Replaces last-click conversions with **Markov-attributed conversions** to reflect true channel contribution.
-- Guides **budget reallocation**:
-  - Campaigns undervalued by last-click but strong in Markov → allocate more.
-  - Campaigns overvalued by last-click but weak in Markov → scale back.
+## 🧠 Model Logic (Simplified)
+
+### 🧩 Markov Chains
+- A Markov Chain models **sequences of events (channel visits)** and the **probability of reaching a conversion**.
+- States = acquisition channels; Terminal states = conversion or drop-off.
+- The probability of a conversion path is calculated based on transition probabilities between channels.
+
+### 🪄 Channel Attribution Logic
+There are two main components:
+
+#### 1. **Removal Effects (Global Concept)**
+- Simulate removing a channel from all paths.
+- Measure the drop in total conversion probability (e.g., if Paid Search is removed, does overall conversion drop by 15%?).
+- This gives **global channel importance**.
+
+#### 2. **Path-Level Attribution (Used at GYG)**
+- For every *observed* path, calculate the path’s total probability of conversion.
+- Distribute conversion value across the **channels in that path**, proportionally to their marginal contribution to that specific sequence.
+- Revenue attribution is thus **fractionally assigned per path**.
+
+Example:
+```
+Path: Display > Email > Paid Search > Conversion  
+Revenue: €200  
+Channel weights in this path: [0.1, 0.3, 0.6] → Attribution: [€20, €60, €120]
+```
 
 ---
 
-#### ✅ 2. Improved tROAS Targets
-- Markov-attributed revenue provides more accurate **Return on Ad Spend (ROAS)** and informs **Target ROAS (tROAS)** settings.
-- Prevents bias toward low-funnel channels (e.g., branded search) by recognizing upper-funnel impact (e.g., generic paid search).
+## 📈 Output and Use Cases
+
+### ✅ Key Outputs
+- **Revenue attributed per channel group or individual channel**
+- **Campaign or portfolio level attribution** possible if channel-to-campaign mappings are known
+- **Adjusted ROAS / tROAS** using path-based conversion value
+
+### 💡 Used For:
+- Smarter tROAS steering
+- Campaign and budget optimization
+- Understanding upper funnel and assist value
+- Pre-testing incrementality estimation
 
 ---
 
-#### ✅ 3. Input for SEM Bidding Center / Strategy Rules
-- Feeds into dashboards and decision layers that define:
-  - Campaign-level **ROAS thresholds**
-  - **Spend tiers**
-  - **Channel or funnel prioritization**
-- These inputs guide how strategies are selected and configured in the **SEM Bidding Center**.
+## 🎯 How Markov Attribution Feeds Into Bidding Strategy at GYG
 
----
-
-#### ✅ 4. Testing & Strategy Evaluation
-- Used to evaluate bidding strategies (e.g., manual vs. tROAS) based on **true contribution**, not just last-click performance.
-- Enhances fairness and accuracy in performance reviews and A/B tests.
-
----
 
 ### 🔁 Attribution Feedback Loop (Simplified)
-
-```text
-1. User Paths → Tracked & Modeled via Markov Chains
-2. → Attributed Conversions (per path, per channel)
-3. → Aggregated in dashboards (Looker)
-4. → Used to steer budget/tROAS inputs into Bidding Center
+1. User Paths → Tracked & Modeled via Markov Chains  
+2. → Attributed Conversions (per path, per channel)  
+3. → Aggregated in dashboards (Looker)  
+4. → Used to steer budget/tROAS inputs into Bidding Center  
 5. → Strategy results evaluated again via Markov KPIs
 
-⚠️ Clarification
-Markov attribution is:
+### ⚠️ Clarification
+Markov attribution is:  
+- ❌ Not sent to Google Ads as real-time conversion actions.  
+- ✅ Used outside Google to inform bidding strategies, targets, and budget allocation.
 
-❌ Not sent to Google Ads as real-time conversion actions.
+---
 
-✅ Used outside Google to inform bidding strategies, targets, and budget allocation.
+## 🔍 Key Advanced Concepts
+
+### 📊 Random weights + optimization
+- Initial channel weights in a path are **randomly assigned**.
+- An optimization algorithm (e.g. gradient descent) iteratively adjusts them to **minimize loss**, defined as the **error between predicted and observed conversions**.
+- This aligns with packages like [`ChannelAttribution`](https://cran.r-project.org/web/packages/ChannelAttribution/index.html) in R and [this Python port](https://github.com/DavideAltomare/ChannelAttribution/blob/master/python/README.md).
+
+### 🧪 Testing & Validation
+- While the model is unsupervised, GYG tested it by comparing to Position-Based models and running **incrementality tests** (e.g., regional holdouts or channel-specific pauses).
+- Expected outcomes: model should reflect actual lift in holdout vs test regions.
+
+---
+
+## 📂 Internal Resources and Links
+
+### 📚 GYG Blog Posts
+- [Understanding Data-Driven Attribution Models](https://www.getyourguide.careers/posts/understanding-data-driven-attribution-models)
+- [Deploying and Pressure Testing a Markov Chains Model](https://www.getyourguide.careers/posts/deploying-and-pressure-testing-a-markov-chains-model)
+
+### 📦 Attribution Package
+- [ChannelAttribution on CRAN (R)](https://cran.r-project.org/web/packages/ChannelAttribution/index.html)
+- [ChannelAttribution Python GitHub](https://github.com/DavideAltomare/ChannelAttribution/blob/master/python/README.md)
+- [ChannelAttribution PDF Docs (R)](https://cran.rstudio.com/web/packages/ChannelAttribution/ChannelAttribution.pdf)
+
+### 🧭 BI & Internal Documentation
+- [GYG Acquisition Channels & Channel Groups](https://stack.gygservice.com/docs/default/component/bi-dataguide/acquisition-channels/)
+
+
+---
+
+## ❓ Open Questions
+
+1. **Granularity**: Does the final attribution ever happen on the *campaign* or *campaign type* level? If so, how is the mapping done?
+2. **Revenue attribution math**: Are **all final revenue calculations based strictly on the sum of actualized fractional path-level weights** (not global removal effects)?
+3. **Validation**: How exactly was the model tested against real-world outcomes? What does a holdout experiment or lift test look like in this context?
+4. **Optimization Process**: In \"random weights + minimized loss\"—how exactly is that defined? How does this map to `ChannelAttribution`'s loss function and algorithmic backend?
+5. **Access to raw data**: Where can we inspect raw paths, attribution weights per path, or simulated conversion drops?
+6. **Codebase**: Where is the Markov pipeline implemented and maintained internally? Is it reproducible in Looker or Databricks?
+7. **Usage**: Who currently uses the *path-level attribution* outputs? Is it feeding back into Google Ads bidding, portfolio steering, CRM planning, or budgeting?
+8. **Data**: Best sources to use for everything.
+
+---
+
+## 📌 Additional Mentions
+
+### 🔖 Landing Page Attribution Model
+- Managed through the **Dollar Sign Tool** in GYGadmin.
+- Used for: POI-level revenue analysis, supply-side reporting, and manual overrides of automated POI mappings.
+
+### 💬 Post-Click Attribution?
+- Is all attribution based on **post-click paths only**?
+- If yes, what are the limitations for channels like **Display & Paid Social**, where much of the impact may be **view-through**?
+
 
