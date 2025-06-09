@@ -189,7 +189,7 @@ Automated systems ensure quality of campaigns:
 
 # Section 2: System Optimization Data Products
 
-## 🔧 a. RSA Optimization
+## 🔧 A. RSA Optimization
 
 ### 🎯 Purpose
 Optimize asset rotation in **Responsive Search Ads (RSAs)** by replacing underperforming assets and inserting new, high-performing ones using a **LightGBM LambdaRank model**. This enables continuous improvement of ad relevance and performance.
@@ -265,7 +265,7 @@ Optimize asset rotation in **Responsive Search Ads (RSAs)** by replacing underpe
 
 ---
 
-## 🔧 b. CIT Mining (Customer Interest Topics)
+## 🔧 B. CIT Mining (Customer Interest Topics)
 
 #### 🎯 Purpose
 Mine and classify **Customer Interest Translations (CITs)** from Google Search Query Reports (SQRs) using a spaCy-based NER pipeline. The output enriches GYG's keyword targeting by uncovering long-tail interests and alternative phrasings across multiple languages.
@@ -337,8 +337,8 @@ After CITs are added to ads:
 
 ### 📈 Monitoring & Quality Metrics
 
-**Pipeline Health**
-- # of CITs added per language / account / CI
+**Pipeline Health of:**
+- Of CITs added per language / account / CI
 - Keyword creation rate from CITs
 - CIT rejection reason breakdown
 
@@ -370,7 +370,7 @@ After CITs are added to ads:
 
 ---
 
-## 🔧 c. Bid Elasticity Mapping (tROAS Recommender)
+## 🔧 C. Bid Elasticity Mapping (tROAS Recommender)
 
 #### 🎯 Purpose
 Recommend revenue-maximizing **target ROAS (tROAS)** values at the portfolio level by analyzing **Google Ads bid simulation data** and modeling **marginal return on ad spend (mROAS)**.
