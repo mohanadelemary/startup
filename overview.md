@@ -9,20 +9,15 @@ This document provides succinct coverage of key topics that need to be mastered 
 - **b.** Setup Process (CMS, Structure, Keywords, Customer Interest Translations and Aliases)  
 - **c.** System Management (Operations, Changes, Shutdowns of Keywords and Other Components)
 
-
 ### [2.System Optimization Data Products](#section-2-system-optimization-data-products)
 - **a.** RSA Optimization
 - **b.** CIT Mining
 - **c.** Bid Elasticity Mapping
 
-
-
 ### [3. Markov Chains Attribution Model](#section-3-markov-chains-attribution-model)
 
+### [4. Experimentation](#section-4-experimentation)
 
-### 4. ROAS Goals and Tactics
-
-### 5. Experimentation
 - **a.** MIM (Marketing Incrementality Measurement)
 - **b.** D&E (Design & Experimentation)
 - **c.** Issues with Geo Studies vs. A/B Testing (Power, MDE)
@@ -31,21 +26,17 @@ This document provides succinct coverage of key topics that need to be mastered 
 - MRX insights presentations
 - types of signals
 
-### 6. DataBricks & Learning Our Data
-
-### 7. Chiara's Workflow and Steering
-
----
-DATA:
-
+### 5. DataBricks, Looker & Learning Our Data
 1. sem-reports-etl-google-ads in Databricks
 2. Marketing Attribution Explore plus whatever Paul used for main performance dashboard
 Both based on Markov Attribution Numbers
 https://getyourguide.looker.com/dashboards/10618?Super+Account=&Account=&Campaign+ID=&Ca[…]ame=&Location+ID=&Report+Week+of+Year=&Report+Date=30+day
 
+### 6. ROAS Goals and Tactics
 
+### 7. Chiara's Workflow and Steering
 
-
+---
 
 
 
@@ -596,4 +587,133 @@ Markov attribution is:
 - Is all attribution based on **post-click paths only**?
 - If yes, what are the limitations for channels like **Display & Paid Social**, where much of the impact may be **view-through**?
 
+---
 
+# Section 4: Experimentation
+
+This section documents the design, implementation, and usage of experimentation systems at GetYourGuide, including synthetic A/B testing (MIM), Geo testing, and uplift estimation with Bayesian time-series models.
+
+---
+
+### 🧪 a. MIM — Marketing Incrementality Measurement
+
+#### 🎯 Purpose
+The **MIM platform** simulates A/B testing for Paid Search and other marketing interventions. It estimates uplift from new strategies like bid changes, RSA asset tests, or budget shifts — without requiring Google-side randomization.
+
+#### ⚙️ Matching Process (Pre-Test Design)
+Instead of assigning users randomly:
+1. **Region or keyword groups** are:
+   - Randomly assigned into thousands of **treatment/control splits**
+   - Scored for **baseline similarity** on:
+     - Pre-period means
+     - Standard deviations
+     - Weekly correlation of KPI trends
+
+2. **Top-scoring splits** are selected as the final treatment/control groups (“basket optimizer” approach).
+
+> The goal: Create pseudo-randomized, balanced groups where **pre-treatment behavior is aligned**, minimizing confounding.
+
+#### 📊 Power Estimation (Simulation-Based not formulaic)
+
+- For randomized tests, you have Independent and Identically Distributed samples with similar variance and therefore can detect power using the equation.
+- In quasi experiments you don't have this assumption and therefore need a simulation based solution. 
+- Power is estimated by **injecting synthetic uplifts** into historical matched baskets and measuring how often the model detects it.
+
+**Steps:**
+- Apply a hypothetical uplift (e.g., +5% revenue) to the treatment post-period.
+- Run the full MIM pipeline (including CausalImpact).
+- Repeat this process **1000+ times**.
+- Power = % of simulations where uplift was **statistically detected** (credible interval excludes 0).
+
+| Variable                | How It Affects Power            | How to Adjust                            |
+|------------------------|----------------------------------|------------------------------------------|
+| **Sample Size**        | ↑ → More power                   | Add more matched regions/keywords        |
+| **Test Duration**      | ↑ → More observations            | Run test for more days                   |
+| **MDE (Effect Size)**  | ↓ → Harder to detect if smaller  | Define realistic business-relevant uplift |
+| **Variance / Noise**   | ↓ → More power                   | Improve matching; use stable KPIs        |
+
+➡️ Based on results, you tweak:
+- ✅ Number of geo units or keywords (sample size)
+- ✅ Duration (how many days)
+- ✅ Target MDE (min detectable effect)
+
+✅ **Default target power** = **80%** at **α = 0.05**
+
+---
+
+### 📉 b. GEO Experimentation
+
+Used when user-level randomization isn't feasible and when testing requires geographic segmentation (e.g., test Germany vs. Austria).
+
+#### 🔑 Core Design
+- Use **region-level units** (e.g., cities, countries)
+- Match based on past revenue, cost, ROAS, and seasonality
+- Requires large treatment effects to overcome noise
+
+> 🧠 Geo tests generally need **MDEs ≥ 10%** because:
+> - High variance across regions
+> - Limited sample size
+> - No user-level randomization
+
+#### 📈 Analysis
+- Time-series based models like **CausalImpact**
+- Sometimes supported by **GeoLift**-style simulations
+- KPI smoothing and weekly windows used to reduce noise
+
+---
+
+### 🧬 c. Design & Experimentation (D&E) Principles
+
+| Step | Description |
+|------|-------------|
+| Define KPIs | Choose stable, high-volume metrics (e.g., revenue, ROAS, cost) |
+| Assign units | Geo or keyword/campaign groups |
+| Baseline window | Fixed pre-period to verify balance |
+| Run test | Lock strategy changes for treatment group |
+| Estimate uplift | Use CausalImpact (Bayesian time series) |
+
+✅ Prefer **CausalImpact** because it:
+- Models pre-period trends
+- Handles seasonality
+- Outputs **posterior distribution** over uplift
+- Avoids simple t-test assumptions
+
+---
+
+### 🧰 d. Tooling, Apps, and Notebooks
+
+| Tool / Resource | Purpose |
+|------------------|---------|
+| `Causal Impact Notebook` | Uplift estimation with Bayesian time series |
+| `Prediction Test Roadmap` | Tracker of active and completed tests |
+| `PS Test Design Template` | Define treatment, control, KPIs |
+| `Experiment Analysis Template` | Document test results, conclusions |
+| `exp-marketing-impact-measurement (GitHub)` | MIM engine code & configs |
+| `Basket Optimizer` | Group balancing logic used for MIM |
+| `MIM UI (WIP)` | Web-based interface for setup & monitoring |
+
+---
+
+### 💬 Summary Notes
+
+- MIM ≠ traditional randomized A/B → it's **synthetic and matched**
+- Matching quality + power simulation = critical
+- Geo tests require high MDE to overcome noise and small n
+- Power simulations replace standard formula-based sample size calculators
+- **All tests must plan for duration, size, and minimum effect** realistically
+
+---
+
+### 📚 Resources
+
+- [📖 MIM Workshop](https://docs.google.com/presentation/d/1NbyTGr-5GLLgpLEDEBJoVYvVOjL1TW4O7Pg2G45Fb2M/edit)
+- [📖 Synthetic A/B Testing Learning Deck](https://docs.google.com/presentation/d/1Vk-hBXpp_8rxRemd5AwIoRXxpHP1T-cPjmsrgllyrXY/edit)
+- [📖 Marketing Experimentation Overview](https://docs.google.com/presentation/d/1NHjbeF1vrsEx7ofuvEOVeecUSIbQoZi3tGB_OQQfaME/edit)
+- [📖 Geo Testing — What You Need to Know](https://docs.google.com/presentation/d/1UPyZOEk8eD9NJvQeW_O8DbNJ2VTE0KzjUwGFg1fbl1k/edit)
+- [🗂️ Prediction Test Backlog](https://docs.google.com/spreadsheets/d/1E9EUvdqXV1-sKrL01_Y1uTTRNzzwvqTqT52WLdrIVn8/edit)
+- [📓 Causal Impact Notebook (Databricks)](https://dbc-d10db17d-b6c4.cloud.databricks.com/editor/notebooks/3069814390569116)
+- [📓 Q2 mROAS Uplift Example](https://dbc-d10db17d-b6c4.cloud.databricks.com/editor/notebooks/3531795185158304)
+- [💻 GitHub: exp-marketing-impact-measurement](https://github.com/getyourguide/exp-marketing-impact-measurement)
+- [MIM Tech Doc](https://docs.google.com/document/d/1M9VFpBbK0AzCxL3iNlLJjZCSBSvZeksjix69pqj5Tuo/edit?tab=t.0#heading=h.2wtwjhu9vlg7)
+
+---
